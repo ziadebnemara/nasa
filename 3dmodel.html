@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exoplanets</title>
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1a3e 50%, #0f0c29 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(2px 2px at 20% 30%, white, transparent),
+                radial-gradient(2px 2px at 60% 70%, white, transparent),
+                radial-gradient(1px 1px at 50% 50%, white, transparent),
+                radial-gradient(1px 1px at 80% 10%, white, transparent),
+                radial-gradient(2px 2px at 90% 60%, white, transparent),
+                radial-gradient(1px 1px at 33% 80%, white, transparent),
+                radial-gradient(1px 1px at 75% 25%, white, transparent);
+            background-size: 200% 200%;
+            animation: twinkle 8s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .shooting-star {
+            position: fixed;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.8);
+            z-index: 1;
+            opacity: 0;
+        }
+
+        @keyframes shoot {
+            0% {
+                opacity: 1;
+                transform: translateX(0) translateY(0);
+            }
+            100% {
+                opacity: 0;
+                transform: translateX(-300px) translateY(300px);
+            }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        h1 {
+            text-align: center;
+            color: #fff;
+            font-size: 3em;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #b8b8d4;
+            font-size: 1.2em;
+            margin-bottom: 50px;
+            font-weight: 300;
+        }
+
+        .models-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 20px 0;
+        }
+
+        .model-box {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .model-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .model-title {
+            color: #fff;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(147, 112, 219, 0.5);
+        }
+
+        model-viewer {
+            width: 100%;
+            height: 400px;
+            border-radius: 12px;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .model-info {
+            margin-top: 15px;
+            color: #b8b8d4;
+            font-size: 0.9em;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            .models-grid {
+                grid-template-columns: 1fr;
+            }
+
+            model-viewer {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Exoplanets</h1>
+        <p class="subtitle">Explore distant worlds in 3D</p>
+
+        <div class="models-grid">
+            <div class="model-box">
+                <model-viewer
+                    src="iris.glb"
+                    alt="3D Model 1"
+                    camera-controls
+                    disable-pan
+                    min-camera-orbit="auto auto 80%"
+                    max-camera-orbit="auto auto 120%"
+                    camera-orbit="0deg 75deg 100%"
+                    auto-rotate
+                    auto-rotate-delay="1000"
+                    rotation-per-second="30deg"
+                    interaction-prompt="none">
+                </model-viewer>
+            </div>
+
+            <div class="model-box">
+                <model-viewer
+                    src="makemake.glb"
+                    alt="3D Model 2"
+                    camera-controls
+                    disable-pan
+                    min-camera-orbit="auto auto 80%"
+                    max-camera-orbit="auto auto 120%"
+                    camera-orbit="0deg 75deg 100%"
+                    auto-rotate
+                    auto-rotate-delay="1000"
+                    rotation-per-second="30deg"
+                    interaction-prompt="none">
+                </model-viewer>
+            </div>
+
+        
+
+            <div class="model-box">
+                <model-viewer
+                    src="ceres.glb"
+                    alt="3D Model 4"
+                    camera-controls
+                    disable-pan
+                    min-camera-orbit="auto auto 80%"
+                    max-camera-orbit="auto auto 120%"
+                    camera-orbit="0deg 75deg 100%"
+                    auto-rotate
+                    auto-rotate-delay="1000"
+                    rotation-per-second="30deg"
+                    interaction-prompt="none">
+                </model-viewer>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Create shooting stars
+        function createShootingStar() {
+            const star = document.createElement('div');
+            star.className = 'shooting-star';
+            star.style.left = Math.random() * window.innerWidth + 'px';
+            star.style.top = Math.random() * (window.innerHeight / 2) + 'px';
+            document.body.appendChild(star);
+
+            star.style.animation = 'shoot 1.5s ease-out forwards';
+
+            setTimeout(() => {
+                star.remove();
+            }, 1500);
+        }
+
+        // Spawn shooting stars randomly
+        setInterval(() => {
+            if (Math.random() > 0.7) {
+                createShootingStar();
+            }
+        }, 3000);
+    </script>
+</body>
+</html>

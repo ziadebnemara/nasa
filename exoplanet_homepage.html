@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exoplanet AI - Discover Distant Worlds</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/8.4.7/swiper-bundle.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Fixed NASA Logo in top right -->
+    <img src="img/nasa-logo.png" alt="NASA Logo" class="fixed-logo">
+    
+    
+    <!-- Navbar (outside everything) -->
+<nav class="navbar">
+    <div class="nav-logo">
+        <img src="img/nasa-logo.png" alt="NASA Logo" class="logo-img">
+    </div>
+<div class="menu-icon">
+    <span class="menu-bar"></span>
+    <span class="menu-bar"></span>
+    <span class="menu-bar"></span>
+</div>
+    <div class="nav-links">
+        <a href="#home" class="nav-link">
+            <span class="nav-icon"></span>
+            <span class="nav-text">Home</span>
+        </a>
+        <a href="#about" class="nav-link">
+            <span class="nav-icon"></span>
+            <span class="nav-text">About Us</span>
+        </a>
+        <a href="#ai-structure" class="nav-link">
+            <span class="nav-icon"></span>
+            <span class="nav-text">AI Model Structure</span>
+        </a>
+        <a href="finalindex.html" class="nav-link">
+            <span class="nav-icon"></span>
+            <span class="nav-text">AI Model</span>
+        </a>
+        <a href="game1.html" class="nav-link">
+            <span class="nav-icon"></span>
+            <span class="nav-text">AI Game</span>
+        </a>
+        <a href="3dmodel.html" class="nav-link">
+            <span class="nav-icon"></span>
+            <span class="nav-text">Models</span>
+        </a>
+            
+    </div>
+</nav>
+    <!-- Main Content Wrapper -->
+    <div class="main-content">
+        <!-- Hero Section -->
+        <section id="home" class="hero-section">
+            <div class="swiper">
+                <div class="swiper-wrapper">
+                    <!-- Slide 1: Proxima Centauri b -->
+                    <div class="swiper-slide">
+                        <div class="video-placeholder planet-bg-1">
+                            <video autoplay muted loop playsinline>
+                                <source src="vids/proxima.mp4" type="video/mp4">
+                            </video>
+                        </div>
+                        <div class="overlay"></div>
+                    </div>
+
+                    <!-- Slide 2: OGLE-2005-blg-390l -->
+                    <div class="swiper-slide">
+                        <div class="video-placeholder planet-bg-2">
+                            <video autoplay muted loop playsinline>
+                                <source src="vids/OGLE-2005-blg-390l.mp4" type="video/mp4">
+                            </video>
+                        </div>
+                        <div class="overlay"></div>
+                    </div>
+
+                    <!-- Slide 3: Kepler-186f -->
+                    <div class="swiper-slide">
+                        <div class="video-placeholder planet-bg-3">
+                            <video autoplay muted loop playsinline>
+                                <source src="vids/poltergeist.mp4" type="video/mp4">
+                            </video>
+                        </div>
+                        <div class="overlay"></div>
+                    </div>
+                </div>
+
+                <div class="swiper-pagination"></div>
+            </div>
+
+            <div class="content">
+                <h1>Explore the Universe with AI</h1>
+                <div class="exoplanet-name">
+                    <span id="typed"></span>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="about-section">
+            <div class="about-container">
+                <h2 class="about-title">About Us</h2>
+                <p class="about-description">
+                    We are beginners in artificial intelligence and space exploration, combining cutting-edge AI technology with the wonder of discovering distant worlds. Our mission is to push the boundaries of what's possible in exoplanet research.
+                </p>
+                <div class="about-content">
+                    <div class="about-card">
+                        <h3>Our Mission</h3>
+                        <p>
+                            To revolutionize exoplanet discovery and analysis through advanced artificial intelligence, making the mysteries of distant worlds accessible to researchers and enthusiasts worldwide.
+                        </p>
+                    </div>
+                    <div class="about-card">
+                        <h3>Our Vision</h3>
+                        <p>
+                            A future where AI-powered tools enable humanity to explore and understand thousands of exoplanets, bringing us closer to answering the age-old question: are we alone in the universe?
+                        </p>
+                    </div>
+                    <div class="about-card">
+                        <h3>Our Technology</h3>
+                        <p>
+                            Using python machine learning algorithms, we analyze vast amounts of astronomical data from nasa to identify, classify, and characterize exoplanets with unprecedented accuracy and speed.
+                        </p>
+                    </div>
+                    <div class="about-card">
+                        <h3>Our Team</h3>
+                        <p>
+                            A group of six passionate beginners in AI and space exploration, dedicated to learning, innovating, and contributing to the field of exoplanet research.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- AI Model Structure Section -->
+<section id="ai-structure" class="ai-structure-section">
+    <div class="ai-structure-container">
+        <h2 class="ai-structure-title">AI Model Structure</h2>
+        <p class="ai-structure-intro">
+            Our exoplanet classification model uses advanced machine learning techniques to identify and categorize celestial objects. Below you'll find detailed performance metrics and feature analysis that demonstrate the model's effectiveness.
+        </p>
+
+        <!-- ROC Curve Section -->
+        <div class="model-info-block">
+            <div class="model-image">
+                <img src="img/image1.jpg" alt="Multi-class ROC Curve">
+            </div>
+            <div class="model-description">
+                <h3>Multi-class ROC Curve Analysis</h3>
+                <p>
+                    This image displays a Multi-class ROC Curve using the One-vs-Rest strategy. It evaluates a classification model's performance for three classes: Not Planet (AUC = 0.91), Planet (AUC = 0.94), and Candidate (AUC = 0.88). The Area Under the Curve (AUC) measures the model's ability to distinguish between classes, with Class Planet showing the highest discriminative power. The dashed line represents a random classifier.
+                </p>
+            </div>
+        </div>
+
+        <!-- Confusion Matrix Section -->
+        <div class="model-info-block reverse">
+            <div class="model-image">
+                <img src="img/image2.jpg" alt="Confusion Matrix">
+            </div>
+            <div class="model-description">
+                <h3>Confusion Matrix Evaluation</h3>
+                <p>
+                    This is a Confusion Matrix evaluating a multi-class model's performance on classifying objects as Not Planet, Planet, or Candidate. The diagonal values (912, 623, 1132) represent correct classifications. Off-diagonal values show misclassifications, such as 243 actual 'Not planets' being predicted as 'Candidates.' The model performs best on the 'Candidate' class.
+                </p>
+            </div>
+        </div>
+
+        <!-- Feature Importance Section -->
+        <div class="model-info-block">
+            <div class="model-image">
+                <img src="img/image3.jpg" alt="Feature Importance Chart">
+            </div>
+            <div class="model-description">
+                <h3>Feature Importance Analysis</h3>
+                <p>
+                    This Feature Importance chart ranks the input variables used by a machine learning model, likely for exoplanet classification. The most important feature is duration (score 73,739.0), followed closely by magnitude (score 71,458.0). The least important feature among those shown is stellar_radius (score 42,710.0). This indicates duration has the strongest influence on the model's predictions.
+                </p>
+            </div>
+                
+                
+            
+            </div>
+        </div>
+        <!-- Data Source Link -->
+        <a class="data-source" href="//exoplanetarchive.ipac.caltech.edu/cgi-bin/TblView/nph-tblView?app=ExoTbls&config=cumulative">Click here to see the dataset</a>
+
+    </div>
+</section>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/8.4.7/swiper-bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

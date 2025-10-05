@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🪐 Exoplanet Detective: Beat the AI!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1a3e 50%, #0f0c29 100%);
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(2px 2px at 20% 30%, white, transparent),
+                radial-gradient(2px 2px at 60% 70%, white, transparent),
+                radial-gradient(1px 1px at 50% 50%, white, transparent),
+                radial-gradient(1px 1px at 80% 10%, white, transparent),
+                radial-gradient(2px 2px at 90% 60%, white, transparent);
+            background-size: 200% 200%;
+            animation: twinkle 8s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .game-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .game-header h1 {
+            font-size: 3em;
+            color: #fff;
+            text-shadow: 0 0 20px rgba(147, 112, 219, 0.8);
+            margin-bottom: 10px;
+        }
+        
+        .game-header p {
+            color: #b8b8d4;
+            font-size: 1.2em;
+        }
+        
+        .score-board {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .score-card {
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(10px);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            border: 2px solid rgba(255,255,255,0.2);
+            transition: transform 0.3s ease;
+        }
+        
+        .score-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .score-card.player {
+            border-color: #10b981;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+        }
+        
+        .score-card.ai {
+            border-color: #ef4444;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+        }
+        
+        .score-label {
+            font-size: 0.9em;
+            color: #b8b8d4;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .score-value {
+            font-size: 3em;
+            font-weight: bold;
+        }
+        
+        .player .score-value {
+            color: #10b981;
+        }
+        
+        .ai .score-value {
+            color: #ef4444;
+        }
+        
+        .planet-card {
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 20px;
+            border: 2px solid rgba(255,255,255,0.2);
+            margin-bottom: 30px;
+        }
+        
+        .round-number {
+            color: #9370db;
+            font-size: 1em;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .planet-name {
+            font-size: 2em;
+            color: #fff;
+            margin-bottom: 30px;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(147, 112, 219, 0.5);
+        }
+        
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .data-item {
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .data-label {
+            color: #b8b8d4;
+            font-size: 0.85em;
+            margin-bottom: 5px;
+        }
+        
+        .data-value {
+            color: #fff;
+            font-size: 1.3em;
+            font-weight: 600;
+        }
+        
+        .choices {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .choice-btn {
+            padding: 20px;
+            background: rgba(255,255,255,0.08);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 12px;
+            color: #fff;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .choice-btn:hover {
+            background: rgba(255,255,255,0.15);
+            transform: translateY(-3px);
+            border-color: #9370db;
+        }
+        
+        .choice-btn.selected {
+            background: #9370db;
+            border-color: #9370db;
+        }
+        
+        .choice-btn.correct {
+            background: #10b981;
+            border-color: #10b981;
+            animation: pulse 0.5s ease;
+        }
+        
+        .choice-btn.wrong {
+            background: #ef4444;
+            border-color: #ef4444;
+            animation: shake 0.5s ease;
+        }
+        
+        .choice-btn.disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        
+        .ai-section {
+            background: rgba(239, 68, 68, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid rgba(239, 68, 68, 0.3);
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .ai-section.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .ai-thinking {
+            color: #ef4444;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .ai-analysis {
+            color: #fecaca;
+            font-size: 0.95em;
+            margin-bottom: 10px;
+        }
+        
+        .ai-decision {
+            background: rgba(239, 68, 68, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+            color: #fff;
+            font-weight: 600;
+            text-align: center;
+            font-size: 1.1em;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .next-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: none;
+        }
+        
+        .next-btn.show {
+            display: block;
+        }
+        
+        .next-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+        
+        .game-over {
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(10px);
+            padding: 50px;
+            border-radius: 20px;
+            text-align: center;
+            border: 2px solid rgba(255,255,255,0.2);
+            display: none;
+        }
+        
+        .game-over.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .game-over h2 {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+        
+        .game-over.win h2 {
+            color: #10b981;
+            text-shadow: 0 0 30px rgba(16, 185, 129, 0.8);
+        }
+        
+        .game-over.lose h2 {
+            color: #ef4444;
+            text-shadow: 0 0 30px rgba(239, 68, 68, 0.8);
+        }
+        
+        .game-over.tie h2 {
+            color: #f59e0b;
+            text-shadow: 0 0 30px rgba(245, 158, 11, 0.8);
+        }
+        
+        .final-score {
+            font-size: 1.5em;
+            margin: 20px 0;
+            color: #b8b8d4;
+        }
+        
+        .play-again {
+            margin-top: 30px;
+            padding: 18px 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .play-again:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="game-header">
+            <h1>🪐 Exoplanet Detective</h1>
+            <p>Analyze the data and beat the AI at identifying exoplanets!</p>
+        </div>
+        
+        <div class="score-board">
+            <div class="score-card player">
+                <div class="score-label">👤 Your Score</div>
+                <div class="score-value" id="playerScore">0</div>
+            </div>
+            <div class="score-card ai">
+                <div class="score-label">🤖 AI Score</div>
+                <div class="score-value" id="aiScore">0</div>
+            </div>
+        </div>
+        
+        <div class="planet-card" id="planetCard">
+            <div class="round-number" id="roundNumber">Round 1 of 10</div>
+            <div class="planet-name" id="planetName"></div>
+            
+            <div class="data-grid" id="dataGrid"></div>
+            
+            <div class="choices" id="choices">
+                <button class="choice-btn" onclick="makeChoice(1)">✅ CONFIRMED<br>Exoplanet</button>
+                <button class="choice-btn" onclick="makeChoice(0)">🔍 CANDIDATE<br>Needs Review</button>
+                <button class="choice-btn" onclick="makeChoice(2)">❌ FALSE POSITIVE<br>Not a Planet</button>
+            </div>
+            
+            <div class="ai-section" id="aiSection">
+                <div class="ai-thinking">🤖 AI Analysis Complete</div>
+                <div id="aiAnalysis"></div>
+                <div class="ai-decision" id="aiDecision"></div>
+            </div>
+            
+            <button class="next-btn" id="nextBtn" onclick="nextRound()">Next Planet →</button>
+        </div>
+        
+        <div class="game-over" id="gameOver">
+            <h2 id="gameOverTitle"></h2>
+            <div class="final-score" id="finalScore"></div>
+            <p id="gameOverMessage" style="color: #b8b8d4; font-size: 1.2em;"></p>
+            <button class="play-again" onclick="location.reload()">🔄 Play Again</button>
+        </div>
+    </div>
+    
+    <script>
+        const planetData = [
+            {name: "Kepler-442b", period: 112.3, depth: 0.045, snr: 28, planet_radius: 1.34, stellar_temp: 4402, equilibrium_temp: 233, correct: 1},
+            {name: "KIC 8462852", period: 0.88, depth: 0.22, snr: 4.2, planet_radius: 0.12, stellar_temp: 6750, equilibrium_temp: 1850, correct: 2},
+            {name: "TRAPPIST-1e", period: 6.1, depth: 0.069, snr: 45, planet_radius: 0.92, stellar_temp: 2559, equilibrium_temp: 246, correct: 1},
+            {name: "HD 189733 b", period: 2.2, depth: 0.031, snr: 87, planet_radius: 1.14, stellar_temp: 5040, equilibrium_temp: 1201, correct: 1},
+            {name: "KOI-314c", period: 23.1, depth: 0.012, snr: 8.7, planet_radius: 1.61, stellar_temp: 3820, equilibrium_temp: 280, correct: 0},
+            {name: "Kepler-16b", period: 228.8, depth: 0.155, snr: 96, planet_radius: 0.75, stellar_temp: 4450, equilibrium_temp: 200, correct: 1},
+            {name: "KIC 12557548", period: 0.65, depth: 0.003, snr: 2.1, planet_radius: 0.08, stellar_temp: 4450, equilibrium_temp: 2000, correct: 2},
+            {name: "Proxima b", period: 11.2, depth: 0.002, snr: 15.3, planet_radius: 1.07, stellar_temp: 3042, equilibrium_temp: 234, correct: 0},
+            {name: "Kepler-62f", period: 267.3, depth: 0.034, snr: 38, planet_radius: 1.41, stellar_temp: 4925, equilibrium_temp: 208, correct: 1},
+            {name: "KOI-2700.01", period: 78.4, depth: 0.008, snr: 5.9, planet_radius: 0.95, stellar_temp: 5680, equilibrium_temp: 310, correct: 0}
+        ];
+        
+        let currentRound = 0;
+        let playerScore = 0;
+        let aiScore = 0;
+        let answered = false;
+        
+        const labels = {
+            1: "CONFIRMED EXOPLANET",
+            0: "CANDIDATE (Needs Review)",
+            2: "FALSE POSITIVE"
+        };
+        
+        function loadPlanet() {
+            answered = false;
+            const planet = planetData[currentRound];
+            
+            document.getElementById('roundNumber').textContent = `Round ${currentRound + 1} of ${planetData.length}`;
+            document.getElementById('planetName').textContent = planet.name;
+            
+            // Display data
+            const dataGrid = document.getElementById('dataGrid');
+            dataGrid.innerHTML = `
+                <div class="data-item">
+                    <div class="data-label">Orbital Period</div>
+                    <div class="data-value">${planet.period} days</div>
+                </div>
+                <div class="data-item">
+                    <div class="data-label">Transit Depth</div>
+                    <div class="data-value">${(planet.depth * 100).toFixed(2)}%</div>
+                </div>
+                <div class="data-item">
+                    <div class="data-label">Signal-to-Noise</div>
+                    <div class="data-value">${planet.snr}</div>
+                </div>
+                <div class="data-item">
+                    <div class="data-label">Planet Radius</div>
+                    <div class="data-value">${planet.planet_radius} R⊕</div>
+                </div>
+                <div class="data-item">
+                    <div class="data-label">Star Temperature</div>
+                    <div class="data-value">${planet.stellar_temp} K</div>
+                </div>
+                <div class="data-item">
+                    <div class="data-label">Equilibrium Temp</div>
+                    <div class="data-value">${planet.equilibrium_temp} K</div>
+                </div>
+            `;
+            
+            // Reset UI
+            document.querySelectorAll('.choice-btn').forEach(btn => {
+                btn.classList.remove('selected', 'correct', 'wrong', 'disabled');
+            });
+            document.getElementById('aiSection').classList.remove('show');
+            document.getElementById('nextBtn').classList.remove('show');
+        }
+        
+        function makeChoice(choice) {
+            if (answered) return;
+            answered = true;
+            
+            const planet = planetData[currentRound];
+            const buttons = document.querySelectorAll('.choice-btn');
+            
+            // Disable all buttons
+            buttons.forEach(btn => btn.classList.add('disabled'));
+            
+            // Mark player's choice
+            buttons[choice].classList.add('selected');
+            
+            // AI makes decision using rules
+            const aiChoice = getAIDecision(planet);
+            
+            // Show results after delay
+            setTimeout(() => {
+                // Show correct answer
+                buttons[planet.correct].classList.add('correct');
+                
+                // Show wrong answers
+                if (choice !== planet.correct) {
+                    buttons[choice].classList.add('wrong');
+                }
+                if (aiChoice !== planet.correct && aiChoice !== choice) {
+                    buttons[aiChoice].style.opacity = '0.7';
+                    buttons[aiChoice].style.borderColor = '#fbbf24';
+                }
+                
+                // Update scores
+                if (choice === planet.correct) {
+                    playerScore++;
+                    document.getElementById('playerScore').textContent = playerScore;
+                }
+                if (aiChoice === planet.correct) {
+                    aiScore++;
+                    document.getElementById('aiScore').textContent = aiScore;
+                }
+                
+                // Show AI analysis
+                showAIAnalysis(planet, aiChoice);
+                
+                // Show next button
+                document.getElementById('nextBtn').classList.add('show');
+            }, 800);
+        }
+        
+        function getAIDecision(planet) {
+            // AI uses these rules (similar to your model)
+            let score = 0;
+            let reasons = [];
+            
+            // Rule 1: SNR is critical
+            if (planet.snr > 30) {
+                score += 3;
+                reasons.push(`Strong signal (SNR: ${planet.snr})`);
+            } else if (planet.snr > 15) {
+                score += 1;
+                reasons.push(`Moderate signal (SNR: ${planet.snr})`);
+            } else if (planet.snr < 5) {
+                score -= 3;
+                reasons.push(`Weak signal (SNR: ${planet.snr})`);
+            }
+            
+            // Rule 2: Transit depth
+            if (planet.depth > 0.02 && planet.depth < 0.2) {
+                score += 2;
+                reasons.push(`Realistic transit depth (${(planet.depth*100).toFixed(2)}%)`);
+            } else if (planet.depth < 0.005) {
+                score -= 2;
+                reasons.push(`Very shallow transit (${(planet.depth*100).toFixed(2)}%)`);
+            }
+            
+            // Rule 3: Orbital period
+            if (planet.period > 0.5 && planet.period < 500) {
+                score += 1;
+                reasons.push(`Reasonable orbit (${planet.period} days)`);
+            } else if (planet.period < 0.5) {
+                score -= 1;
+                reasons.push(`Extremely short orbit (${planet.period} days)`);
+            }
+            
+            // Rule 4: Planet radius
+            if (planet.planet_radius > 0.5 && planet.planet_radius < 20) {
+                score += 1;
+                reasons.push(`Plausible size (${planet.planet_radius} R⊕)`);
+            } else if (planet.planet_radius < 0.2) {
+                score -= 2;
+                reasons.push(`Unusually small (${planet.planet_radius} R⊕)`);
+            }
+            
+            // Store reasons for display
+            planet.aiReasons = reasons;
+            
+            // Make decision
+            if (score >= 5) return 1;      // Confirmed
+            else if (score >= 0) return 0; // Candidate
+            else return 2;                 // False positive
+        }
+        
+        function showAIAnalysis(planet, aiChoice) {
+            const aiSection = document.getElementById('aiSection');
+            const analysisDiv = document.getElementById('aiAnalysis');
+            const decisionDiv = document.getElementById('aiDecision');
+            
+            analysisDiv.innerHTML = planet.aiReasons.map(r => 
+                `<div class="ai-analysis">• ${r}</div>`
+            ).join('');
+            
+            decisionDiv.textContent = `AI Prediction: ${labels[aiChoice]}`;
+            
+            aiSection.classList.add('show');
+        }
+        
+        function nextRound() {
+            currentRound++;
+            if (currentRound < planetData.length) {
+                loadPlanet();
+            } else {
+                endGame();
+            }
+        }
+        
+        function endGame() {
+            document.getElementById('planetCard').style.display = 'none';
+            
+            const gameOverDiv = document.getElementById('gameOver');
+            const title = document.getElementById('gameOverTitle');
+            const finalScore = document.getElementById('finalScore');
+            const message = document.getElementById('gameOverMessage');
+            
+            finalScore.textContent = `Final Score: You ${playerScore} - ${aiScore} AI`;
+            
+            if (playerScore > aiScore) {
+                gameOverDiv.classList.add('win');
+                title.textContent = '🎉 You Win!';
+                message.textContent = 'Your exoplanet detection skills are superior! You\'ve beaten the AI algorithm!';
+            } else if (playerScore < aiScore) {
+                gameOverDiv.classList.add('lose');
+                title.textContent = '🤖 AI Wins';
+                message.textContent = 'The AI\'s pattern recognition was stronger this time. Study the data and try again!';
+            } else {
+                gameOverDiv.classList.add('tie');
+                title.textContent = '🤝 Perfect Tie!';
+                message.textContent = 'You and the AI are equally skilled at exoplanet detection!';
+            }
+            
+            gameOverDiv.classList.add('show');
+        }
+        
+        // Start game
+        loadPlanet();
+    </script>
+</body>
+</html>

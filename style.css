@@ -1,0 +1,531 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.data-source{
+    text-decoration: none;
+    margin-left: 50px;
+    color: white;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow-x: hidden;
+    background: #000;
+    scroll-behavior: smooth;
+}
+
+.hero-section {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.swiper {
+    width: 100%;
+    height: 100%;
+}
+
+.swiper-slide {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.swiper-slide video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.3));
+    z-index: 1;
+}
+
+.content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 2;
+    color: white;
+    width: 90%;
+    max-width: 1200px;
+}
+
+h1 {
+    font-size: 4rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    text-shadow: 2px 2px 20px rgba(0,0,0,0.8);
+    letter-spacing: 2px;
+    background: linear-gradient(45deg, #fff, #a8c0ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.exoplanet-name {
+    font-size: 2.5rem;
+    font-weight: 300;
+    min-height: 80px;
+    color: #4facfe;
+    text-shadow: 2px 2px 15px rgba(79, 172, 254, 0.5);
+    letter-spacing: 1px;
+}
+
+.swiper-pagination-bullet {
+    background: white;
+    opacity: 0.5;
+    width: 12px;
+    height: 12px;
+}
+
+.swiper-pagination-bullet-active {
+    opacity: 1;
+    background: #4facfe;
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2.5rem;
+    }
+    .exoplanet-name {
+        font-size: 1.5rem;
+        min-height: 60px;
+    }
+}
+
+.navbar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    width: 80px;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    border-right: 1px solid rgba(79, 172, 254, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 0;
+    z-index: 1000;
+    transition: width 0.3s ease;
+}
+
+.navbar:hover {
+    width: 220px;
+}
+
+.nav-logo {
+    font-size: 1.5rem;
+    color: #4facfe;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+/* Menu Icon (Hamburger) */
+.menu-icon {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    cursor: pointer;
+    margin-bottom: 3rem;
+    padding: 10px;
+    transition: opacity 0.3s ease;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu-bar {
+    width: 35px;
+    height: 4px;
+    background: #4facfe;
+    border-radius: 3px;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(79, 172, 254, 0.5);
+}
+
+.navbar:hover .menu-icon {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.nav-links {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    width: 100%;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    color: #fff;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    justify-content: flex-start;
+}
+
+.nav-link:hover {
+    background: rgba(79, 172, 254, 0.2);
+    color: #4facfe;
+}
+
+.nav-link::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 3px;
+    background: #4facfe;
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
+}
+
+.nav-link:hover::before {
+    transform: scaleY(1);
+}
+
+.nav-icon {
+    font-size: 1.5rem;
+    min-width: 30px;
+    display: block;
+}
+
+.nav-text {
+    white-space: nowrap;
+    opacity: 0;
+    width: 0;
+    overflow: hidden;
+    font-size: 0.9rem;
+    transition: opacity 0.3s ease, width 0.3s ease;
+}
+
+.navbar:hover .nav-text {
+    opacity: 1;
+    width: auto;
+}
+
+/* Main Content Offset */
+.main-content {
+    margin-left: 80px;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .navbar {
+        width: 60px;
+    }
+
+    .navbar:hover {
+        width: 200px;
+    }
+
+    .main-content {
+        margin-left: 60px;
+    }
+}
+
+/* About Section */
+.about-section {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a0033 50%, #000000 100%);
+    padding: 5rem 3rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.about-section::before {
+    content: '';
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(79, 172, 254, 0.1) 0%, transparent 70%);
+    border-radius: 50%;
+    top: -250px;
+    right: -250px;
+    animation: float 20s ease-in-out infinite;
+}
+
+.about-section::after {
+    content: '';
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(168, 192, 255, 0.1) 0%, transparent 70%);
+    border-radius: 50%;
+    bottom: -200px;
+    left: -200px;
+    animation: float 15s ease-in-out infinite reverse;
+}
+
+@keyframes float {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(50px, 50px); }
+}
+
+.about-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+.about-title {
+    font-size: 3.5rem;
+    color: #fff;
+    text-align: center;
+    margin-bottom: 3rem;
+    background: linear-gradient(45deg, #4facfe, #a8c0ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.about-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    margin-top: 3rem;
+}
+
+.about-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(79, 172, 254, 0.2);
+    border-radius: 20px;
+    padding: 2.5rem;
+    transition: all 0.3s ease;
+}
+
+.about-card:hover {
+    transform: translateY(-10px);
+    border-color: rgba(79, 172, 254, 0.5);
+    box-shadow: 0 10px 30px rgba(79, 172, 254, 0.3);
+}
+
+.about-card h3 {
+    font-size: 1.8rem;
+    color: #4facfe;
+    margin-bottom: 1rem;
+}
+
+.about-card p {
+    color: #d0d0d0;
+    line-height: 1.8;
+    font-size: 1.1rem;
+}
+
+.about-description {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: #d0d0d0;
+    font-size: 1.2rem;
+    line-height: 2;
+    max-width: 900px;
+    margin: 0 auto 3rem;
+}
+
+/* Mobile Responsive for About Section */
+@media (max-width: 768px) {
+    .about-title {
+        font-size: 2.5rem;
+    }
+
+    .about-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .about-section {
+        padding: 3rem 1.5rem;
+    }
+}
+
+/* Logo image styling */
+.logo-img {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    filter: brightness(1.2);
+}
+
+/* Fixed NASA logo in top right corner */
+.fixed-logo {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 999;
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.5));
+    transition: transform 0.3s ease;
+}
+
+.fixed-logo:hover {
+    transform: scale(1.1);
+}
+
+/* AI Model Structure Section */
+.ai-structure-section {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #000000 0%, #0a1a33 50%, #000000 100%);
+    padding: 5rem 3rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.ai-structure-section::before {
+    content: '';
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(79, 172, 254, 0.08) 0%, transparent 70%);
+    border-radius: 50%;
+    top: 20%;
+    left: -300px;
+    animation: float 25s ease-in-out infinite;
+}
+
+.ai-structure-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+.ai-structure-title {
+    font-size: 3.5rem;
+    color: #fff;
+    text-align: center;
+    margin-bottom: 2rem;
+    background: linear-gradient(45deg, #4facfe, #a8c0ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.ai-structure-intro {
+    text-align: center;
+    color: #d0d0d0;
+    font-size: 1.2rem;
+    line-height: 1.8;
+    max-width: 900px;
+    margin: 0 auto 5rem;
+}
+
+.model-info-block {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    margin-bottom: 5rem;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(79, 172, 254, 0.2);
+    border-radius: 20px;
+    padding: 3rem;
+    transition: all 0.3s ease;
+}
+
+.model-info-block:hover {
+    border-color: rgba(79, 172, 254, 0.4);
+    box-shadow: 0 10px 40px rgba(79, 172, 254, 0.2);
+    transform: translateY(-5px);
+}
+
+.model-info-block.reverse {
+    grid-template-columns: 1fr 1fr;
+}
+
+.model-info-block.reverse .model-image {
+    order: 2;
+}
+
+.model-info-block.reverse .model-description {
+    order: 1;
+}
+
+.model-image {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.model-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 15px;
+    border: 2px solid rgba(79, 172, 254, 0.3);
+    transition: all 0.3s ease;
+}
+
+.model-image img:hover {
+    border-color: rgba(79, 172, 254, 0.6);
+    transform: scale(1.02);
+}
+
+.model-description h3 {
+    font-size: 2rem;
+    color: #4facfe;
+    margin-bottom: 1.5rem;
+}
+
+.model-description p {
+    color: #d0d0d0;
+    line-height: 1.8;
+    font-size: 1.1rem;
+}
+
+/* Mobile Responsive for AI Structure Section */
+@media (max-width: 768px) {
+    .ai-structure-title {
+        font-size: 2.5rem;
+    }
+
+    .model-info-block,
+    .model-info-block.reverse {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        padding: 2rem;
+    }
+
+    .model-info-block.reverse .model-image {
+        order: 1;
+    }
+
+    .model-info-block.reverse .model-description {
+        order: 2;
+    }
+
+    .ai-structure-section {
+        padding: 3rem 1.5rem;
+    }
+}

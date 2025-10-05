@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>🪐 Exoplanet Discovery Predictor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1a3e 50%, #0f0c29 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(2px 2px at 20% 30%, white, transparent),
+                radial-gradient(2px 2px at 60% 70%, white, transparent),
+                radial-gradient(1px 1px at 50% 50%, white, transparent),
+                radial-gradient(1px 1px at 80% 10%, white, transparent),
+                radial-gradient(2px 2px at 90% 60%, white, transparent),
+                radial-gradient(1px 1px at 33% 80%, white, transparent),
+                radial-gradient(1px 1px at 75% 25%, white, transparent);
+            background-size: 200% 200%;
+            animation: twinkle 8s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+        
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #fff;
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #b8b8d4;
+            font-size: 1.1em;
+            margin-bottom: 40px;
+            font-weight: 300;
+        }
+        
+        .form-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            color: #e0e0ff;
+            font-size: 0.95em;
+            margin-bottom: 8px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+        
+        input[type="number"],
+        input[type="text"] {
+            width: 100%;
+            padding: 14px 18px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: #fff;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+        
+        input[type="number"] {
+            appearance: textfield;
+            -moz-appearance: textfield;
+        }
+        
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        
+        input[type="number"]::placeholder,
+        input[type="text"]::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+        
+        input[type="number"]:focus,
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #9370db;
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 0 15px rgba(147, 112, 219, 0.4);
+        }
+        
+        input[type="number"].error {
+            border-color: #ff4757;
+            animation: shake 0.3s ease;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        button {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .clear-btn {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            box-shadow: 0 4px 15px rgba(240, 147, 251, 0.4);
+        }
+        
+        .clear-btn:hover {
+            box-shadow: 0 6px 20px rgba(240, 147, 251, 0.6);
+        }
+        
+        #result {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            text-align: center;
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #fff;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        #result.show {
+            opacity: 1;
+        }
+        
+        #result.success {
+            background: rgba(46, 213, 115, 0.15);
+            border-color: rgba(46, 213, 115, 0.4);
+            color: #2ed573;
+        }
+        
+        #result.error {
+            background: rgba(255, 71, 87, 0.15);
+            border-color: rgba(255, 71, 87, 0.4);
+            color: #ff4757;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+        }
+        
+        @media (min-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        .upload-section {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .upload-label {
+            display: block;
+            color: #e0e0ff;
+            font-size: 1em;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+        
+        .upload-btn {
+            width: auto;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: none;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 15px rgba(240, 147, 251, 0.4);
+            margin: 0;
+        }
+        
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(240, 147, 251, 0.6);
+        }
+        
+        .file-name {
+            display: block;
+            margin-top: 10px;
+            color: #2ed573;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+        
+        .divider {
+            text-align: center;
+            margin: 25px 0;
+            position: relative;
+        }
+        
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .divider span {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 5px 15px;
+            color: #b8b8d4;
+            font-size: 0.9em;
+            position: relative;
+            z-index: 1;
+        }
+        
+        #loadRowBtn {
+            text-transform: none;
+            letter-spacing: 0.5px;
+        }
+        
+        .help-text {
+            display: block;
+            margin-top: 8px;
+            color: #b8b8d4;
+            font-size: 0.85em;
+            line-height: 1.5;
+        }
+        
+        .help-text strong {
+            color: #e0e0ff;
+        }
+        
+        .optional-field {
+            grid-column: 1 / -1;
+            margin-top: 10px;
+            padding: 20px;
+            background: rgba(147, 112, 219, 0.1);
+            border-radius: 12px;
+            border: 2px dashed rgba(147, 112, 219, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🪐 Exoplanet Discovery Predictor</h1>
+        <p class="subtitle">Discover the cosmos, one planet at a time ✨</p>
+        
+        <div class="form-container">
+            <div class="upload-section">
+                <label for="csvUpload" class="upload-label">📁 Upload CSV File (Optional)</label>
+                <input type="file" id="csvUpload" accept=".csv" style="display: none;">
+                <button type="button" class="upload-btn" onclick="document.getElementById('csvUpload').click()">
+                    📤 Choose CSV File
+                </button>
+                <span id="fileName" class="file-name"></span>
+                
+                <div id="rowSelector" style="display: none; margin-top: 15px;">
+                    <label for="rowSelect" style="display: block; color: #e0e0ff; margin-bottom: 8px;">Enter Row Number (1-<span id="maxRows">0</span>):</label>
+                    <input type="number" id="rowSelect" min="1" step="1" placeholder="Enter row number" style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.08); border: 2px solid rgba(255, 255, 255, 0.2); border-radius: 12px; color: #fff; font-size: 1em;">
+                    <button type="button" id="loadRowBtn">
+                        Load Selected Row
+                    </button>
+                </div>
+            </div>
+            
+            <div class="divider">
+                <span>or enter manually</span>
+            </div>
+            
+            <form id="predictForm">
+                <div class="grid">
+                    <div class="form-group">
+                        <label> Orbital Period (days)</label>
+                        <input type="number" step="any" name="period" placeholder="Enter value">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label> Duration of Transit (Hours)</label>
+                        <input type="number" step="any" name="duration" placeholder="Enter value">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label> Depth of Signal (ppm)</label>
+                        <input type="number" step="any" name="depth" placeholder="Enter value">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label> Radius of Planet (R⊕)</label>
+                        <input type="number" step="any" name="planet_radius" placeholder="Enter value">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label> Temperature of Star (K)</label>
+                        <input type="number" step="any" name="stellar_temperature" placeholder="Enter value">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label> Gravity of Star (log₁₀(cm/s²))</label>
+                        <input type="number" step="any" name="stellar_gravity" placeholder="Enter value">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Radius of Star (R☉)</label>
+                        <input type="number" step="any" name="stellar_radius" placeholder="Enter value">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Magnitude of Signal (Kepler Magnitude)</label>
+                        <input type="number" step="any" name="magnitude" placeholder="Enter value">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label> Signal to Noise Ratio (Dimensionless)</label>
+                        <input type="number" step="any" name="snr" placeholder="Enter value">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label> Equilibrium Temperature (K)</label>
+                        <input type="number" step="any" name="equilibrium_temp" placeholder="Enter value">
+                    </div>
+                    
+                    <div class="form-group optional-field">
+                        <label>🎓 Known Disposition (Optional)</label>
+                        <input type="text" name="known_disposition" placeholder="e.g., CONFIRMED, FALSE POSITIVE, CANDIDATE">
+                        <small class="help-text">
+                             <strong>Help improve predictions!</strong> If you already know whether this is a confirmed exoplanet, false positive, or candidate, please enter it here. Your input helps the model learn and become more accurate over time.
+                        </small>
+                    </div>
+                </div>
+                
+                <button type="submit"> Predict Status</button>
+                <button type="button" class="clear-btn" onclick="clearForm()">🗑️ Clear All Fields</button>
+            </form>
+            
+            <div id="result"></div>
+        </div>
+    </div>
+    
+    <script>
+        const resultDiv = document.getElementById('result');
+        const csvUpload = document.getElementById('csvUpload');
+        const fileNameSpan = document.getElementById('fileName');
+        const rowSelector = document.getElementById('rowSelector');
+        const rowSelect = document.getElementById('rowSelect');
+        const loadRowBtn = document.getElementById('loadRowBtn');
+        const maxRowsSpan = document.getElementById('maxRows');
+        
+        let csvData = [];
+        let csvHeaders = [];
+        
+        function clearForm() {
+            document.querySelectorAll('input[type="number"], input[type="text"]').forEach(input => {
+                input.value = '';
+                input.classList.remove('error');
+            });
+            resultDiv.className = '';
+            resultDiv.innerHTML = '';
+            fileNameSpan.textContent = '';
+            rowSelector.style.display = 'none';
+            csvData = [];
+            csvHeaders = [];
+            rowSelect.value = '';
+            maxRowsSpan.textContent = '0';
+        }
+        
+        function populateFormWithRow(rowIndex) {
+            const row = csvData[rowIndex];
+            if (!row || !csvHeaders.length) return;
+            
+            const targetFields = [
+                'period', 'duration', 'depth', 'planet_radius',
+                'stellar_temperature', 'stellar_gravity', 'stellar_radius',
+                'magnitude', 'snr', 'equilibrium_temp'
+            ];
+            
+            let matchedCount = 0;
+            
+            csvHeaders.forEach((header, index) => {
+                if (!header || header === '') return;
+                
+                const fieldName = findBestMatch(header, targetFields);
+                const value = row.values[index];
+                
+                const numValue = parseFloat(value);
+                if (fieldName && value && value !== '' && !isNaN(numValue)) {
+                    const input = document.querySelector(`input[name="${fieldName}"]`);
+                    if (input) {
+                        input.value = value;
+                        input.classList.remove('error');
+                        matchedCount++;
+                    }
+                }
+            });
+            
+            if (matchedCount > 0) {
+                resultDiv.className = 'success show';
+                resultDiv.innerHTML = `✅ Loaded Row ${rowIndex + 1} - Matched ${matchedCount} field(s)`;
+            }
+        }
+        
+        loadRowBtn.addEventListener('click', function() {
+            const selectedRow = parseInt(rowSelect.value);
+            if (isNaN(selectedRow) || selectedRow < 1 || selectedRow > csvData.length) {
+                resultDiv.className = 'error show';
+                resultDiv.innerHTML = `⚠️ Please enter a valid row number (1-${csvData.length})`;
+                return;
+            }
+            populateFormWithRow(selectedRow - 1);
+        });
+        
+        rowSelect.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                loadRowBtn.click();
+            }
+        });
+        
+        function calculateSimilarity(str1, str2) {
+            str1 = str1.toLowerCase().replace(/[^a-z0-9]/g, '');
+            str2 = str2.toLowerCase().replace(/[^a-z0-9]/g, '');
+            
+            if (str1 === str2) return 1;
+            if (str1.length === 0 || str2.length === 0) return 0;
+            
+            if (str1.includes(str2) || str2.includes(str1)) {
+                return 0.8;
+            }
+            
+            const matrix = [];
+            for (let i = 0; i <= str2.length; i++) {
+                matrix[i] = [i];
+            }
+            for (let j = 0; j <= str1.length; j++) {
+                matrix[0][j] = j;
+            }
+            for (let i = 1; i <= str2.length; i++) {
+                for (let j = 1; j <= str1.length; j++) {
+                    if (str2.charAt(i - 1) === str1.charAt(j - 1)) {
+                        matrix[i][j] = matrix[i - 1][j - 1];
+                    } else {
+                        matrix[i][j] = Math.min(
+                            matrix[i - 1][j - 1] + 1,
+                            matrix[i][j - 1] + 1,
+                            matrix[i - 1][j] + 1
+                        );
+                    }
+                }
+            }
+            
+            const maxLen = Math.max(str1.length, str2.length);
+            return 1 - matrix[str2.length][str1.length] / maxLen;
+        }
+        
+        function findBestMatch(header, targetFields) {
+            const cleanHeader = header.toLowerCase().replace(/[^a-z0-9]/g, '');
+            
+            const exactMatches = {
+                'period': 'period',
+                'orbitalperiod': 'period',
+                'duration': 'duration',
+                'orbitalduration': 'duration',
+                'depth': 'depth',
+                'signaldepth': 'depth',
+                'radiusofplanet': 'planet_radius',
+                'planetradius': 'planet_radius',
+                'startemperature': 'stellar_temperature',
+                'stellartemperature': 'stellar_temperature',
+                'stargravity': 'stellar_gravity',
+                'stellargravity': 'stellar_gravity',
+                'starradius': 'stellar_radius',
+                'stellarradius': 'stellar_radius',
+                'magnitude': 'magnitude',
+                'snr': 'snr',
+                'soundtonoiseratio': 'snr',
+                'signaltonoiseratio': 'snr',
+                'equilibriumtemperature': 'equilibrium_temp',
+                'equilibriumtemp': 'equilibrium_temp'
+            };
+            
+            if (exactMatches[cleanHeader]) {
+                return exactMatches[cleanHeader];
+            }
+            
+            const keywords = {
+                'period': ['period', 'orbital'],
+                'duration': ['duration', 'exposed', 'time', 'transit'],
+                'depth': ['depth', 'signal', 'dip'],
+                'planet_radius': ['planet', 'planetradius', 'radius'],
+                'stellar_temperature': ['temperature', 'temp', 'stellar', 'star', 'teff'],
+                'stellar_gravity': ['gravity', 'stellar', 'star', 'logg'],
+                'stellar_radius': ['stellarradius', 'starradius', 'radiusstar'],
+                'magnitude': ['magnitude', 'mag', 'brightness'],
+                'snr': ['noise', 'ratio', 'snr', 'signaltonoise'],
+                'equilibrium_temp': ['equilibrium', 'equilibriumtemp', 'teq']
+            };
+            
+            let bestMatch = null;
+            let bestScore = 0;
+            
+            for (const fieldName in keywords) {
+                const keywordList = keywords[fieldName];
+                let score = calculateSimilarity(header, fieldName);
+                
+                for (let k = 0; k < keywordList.length; k++) {
+                    const keyword = keywordList[k];
+                    const keywordScore = calculateSimilarity(header, keyword);
+                    score = Math.max(score, keywordScore);
+                    
+                    if (header.includes(keyword)) {
+                        score += 0.2;
+                    }
+                }
+                
+                if (score > bestScore && score > 0.5) {
+                    bestScore = score;
+                    bestMatch = fieldName;
+                }
+            }
+            
+            return bestMatch;
+        }
+        
+        csvUpload.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            fileNameSpan.textContent = `✅ ${file.name}`;
+            
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                try {
+                    const csv = event.target.result;
+                    let lines = csv.split('\n').filter(line => line.trim());
+                    
+                    if (lines.length === 0) {
+                        alert('CSV file is empty');
+                        return;
+                    }
+                    
+                    const delimiter = lines[0].includes(',') ? ',' : /\s+/;
+                    
+                    csvHeaders = typeof delimiter === 'string'
+                        ? lines[0].split(delimiter).map(h => h.trim().toLowerCase())
+                        : lines[0].trim().split(delimiter).map(h => h.trim().toLowerCase());
+                    
+                    csvData = [];
+                    rowSelect.value = '';
+                    
+                    for (let i = 1; i < lines.length; i++) {
+                        const values = typeof delimiter === 'string'
+                            ? lines[i].split(delimiter).map(v => v.trim())
+                            : lines[i].trim().split(delimiter).map(v => v.trim());
+                        
+                        if (values.length === csvHeaders.length) {
+                            csvData.push({ values: values });
+                        }
+                    }
+                    
+                    if (csvData.length > 0) {
+                        rowSelector.style.display = 'block';
+                        maxRowsSpan.textContent = csvData.length;
+                        rowSelect.max = csvData.length;
+                        
+                        populateFormWithRow(0);
+                        
+                        resultDiv.className = 'success show';
+                        resultDiv.innerHTML = `✅ CSV loaded! ${csvData.length} row(s) available`;
+                    } else {
+                        resultDiv.className = 'error show';
+                        resultDiv.innerHTML = '⚠️ No valid data rows found in CSV';
+                    }
+                    
+                } catch (error) {
+                    resultDiv.className = 'error show';
+                    resultDiv.innerHTML = '⚠️ Error parsing CSV: ' + error.message;
+                }
+            };
+            
+            reader.readAsText(file);
+        });
+        
+        document.getElementById('predictForm').onsubmit = async function(e) {
+            e.preventDefault();
+            
+            document.querySelectorAll('input[type="number"]').forEach(input => {
+                input.classList.remove('error');
+            });
+            
+            const formData = new FormData(e.target);
+            const data = {};
+            let hasError = false;
+            
+            for (const [key, value] of formData.entries()) {
+                if (key === 'known_disposition') {
+                    if (value && value.trim() !== '') {
+                        data[key] = value.trim();
+                    }
+                    continue;
+                }
+                
+                if (value === '' || value === null) {
+                    hasError = true;
+                    const input = document.querySelector(`input[name="${key}"]`);
+                    if (input) {
+                        input.classList.add('error');
+                    }
+                } else {
+                    data[key] = parseFloat(value);
+                }
+            }
+            
+            if (hasError) {
+                resultDiv.className = 'error show';
+                resultDiv.innerHTML = '⚠️ Please enter all required fields';
+                return;
+            }
+            
+            resultDiv.className = 'show';
+            resultDiv.innerHTML = '🔄 Analyzing cosmic data...';
+            
+            try {
+                const response = await fetch('http://localhost:5000/predict', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                
+                if ('prediction' in result) {
+                    const label = result.label !== undefined ? result.label : null;
+                    const fallback = {
+                        1: 'exoplanet', 
+                        0: 'candidate of exoplanet', 
+                        2: 'not an exoplanet'
+                    };
+                    const display = label !== null ? label : (fallback[result.prediction] || result.prediction);
+                    
+                    let emoji = '🪐';
+                    if (display.toLowerCase().includes('exoplanet') && !display.toLowerCase().includes('not') && !display.toLowerCase().includes('candidate')) {
+                        emoji = '✅ 🪐';
+                    } else if (display.toLowerCase().includes('candidate')) {
+                        emoji = '🔍 🌟';
+                    } else if (display.toLowerCase().includes('not')) {
+                        emoji = '❌ 🌑';
+                    }
+                    
+                    resultDiv.className = 'success show';
+                    resultDiv.innerHTML = `${emoji} Prediction: <strong>${display}</strong>`;
+                    
+                    if (data.known_disposition) {
+                        setTimeout(() => {
+                            resultDiv.innerHTML += `<br><small style="font-size: 0.8em; margin-top: 10px; display: block;">🙏 Thank you for helping improve the model!</small>`;
+                        }, 500);
+                    }
+                } else if ('error' in result) {
+                    resultDiv.className = 'error show';
+                    resultDiv.innerHTML = '⚠️ Error: ' + result.error;
+                } else {
+                    resultDiv.className = 'error show';
+                    resultDiv.innerHTML = '⚠️ Unexpected response!';
+                }
+            } catch (err) {
+                resultDiv.className = 'error show';
+                resultDiv.innerHTML = '⚠️ Request failed: ' + err.message;
+            }
+        };
+        
+        document.querySelectorAll('input[type="number"]').forEach(input => {
+            input.addEventListener('input', function() {
+                this.classList.remove('error');
+            });
+        });
+    </script>
+</body>
+</html>
